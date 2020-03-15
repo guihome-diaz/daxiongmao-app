@@ -1,0 +1,46 @@
+# java binaries
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# IDE files (Eclipse, IntelliJ)
+.project
+.classpath
+.checkstyle
+.idea/
+.settings/
+
+# Source control
+.svn/
+.git/
+
+# Build systems
+out/
+bin/
+build/
+target/
+.gradle/
+dist/
+tmp/
+
+# JavaScript
+bower_components/
+node_modules/
+npm-debug.log
+
+# EmberJS (misc)
+.sass-cache
+connect.lock
+coverage/*
+libpeerconnection.log
+testem.log
+
