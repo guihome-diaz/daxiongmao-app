@@ -17,11 +17,11 @@ public class StringToClassUtils {
 
     // ------------------ Singleton ------------------
     /** Create an instance of the class at the time of class loading */
-    private static final StringToClassUtils instance = new StringToClassUtils();
+    private static final StringToClassUtils INSTANCE = new StringToClassUtils();
 
     /** @return Parameter utils class */
     private static StringToClassUtils getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     // ------------------ Class settings ------------------

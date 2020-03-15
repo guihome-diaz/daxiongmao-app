@@ -26,6 +26,9 @@ public enum AppLang {
     /** Language code in 2 letters (ex: FR, EN, DE, ZH, ..) */
     private String languageCode;
 
+    /** Size of language codes */
+    private static final int LANGUAGE_CODES_SIZE = 2;
+
     /**
      * @param languageCode Language code in 2 letters (ex: FR, EN, DE, ZH, ..)
      */
@@ -50,7 +53,7 @@ public enum AppLang {
             return Optional.empty();
         }
         final String trimSearchLang = searchLang.trim();
-        if (searchLang.trim().length() > 2) {
+        if (searchLang.trim().length() > LANGUAGE_CODES_SIZE) {
             log.warn("Invalid language code received: " + trimSearchLang);
             return Optional.empty();
         }

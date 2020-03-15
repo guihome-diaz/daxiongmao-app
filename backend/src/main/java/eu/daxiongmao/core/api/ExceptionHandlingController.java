@@ -54,8 +54,6 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
         return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ApiErrorCodesEnum.HTTP_400_BAD_REQUEST, ex), request);
     }
 
-
-    // HTTP 404: not found
     @ExceptionHandler({ NoResultException.class})
     protected ResponseEntity<Object> handleNotFound(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, ApiErrorCodesEnum.HTTP_404_NOT_FOUND, ex), request);

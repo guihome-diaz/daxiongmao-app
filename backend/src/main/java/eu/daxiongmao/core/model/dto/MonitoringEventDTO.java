@@ -36,14 +36,14 @@ public class MonitoringEventDTO implements Serializable {
     private String eventType;
 
     /** Date-time of the event */
-    private Date eventTime = new Date();
+    private Date eventTime;
 
     /** Name of the 3rd party (Google, Facebook, OVH, etc.) */
     @Max(100)
     private String thirdParty;
 
     /** Execution duration in milliseconds (ms) */
-    private long executionTimeInMs;
+    private Long executionTimeInMs;
 
     /** To track down success and errors. This is useful to compare timing issues on failure (SUCCESS, FAILURE) */
     @Max(50)
@@ -64,4 +64,8 @@ public class MonitoringEventDTO implements Serializable {
     /** Free text field to describe the situation. Might be useful sometimes (content truncate at 4000) */
     @Max(4000)
     private String comments;
+
+    public MonitoringEventDTO() {
+        this.eventTime = new Date();
+    }
 }

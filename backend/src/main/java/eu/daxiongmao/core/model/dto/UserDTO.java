@@ -88,7 +88,7 @@ public class UserDTO implements Serializable {
     private Boolean isActive;
 
     /** Object version. This is incremented at each operation */
-    private long version;
+    private Long version;
 
     public UserDTO() {
         super();
