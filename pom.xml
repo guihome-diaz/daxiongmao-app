@@ -8,6 +8,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Daxiongmao :: main application</name>
 	<description>Personal application to host various developments tricks, trainings and best practices</description>
+	<packaging>pom</packaging>
 
 	<properties>
 		<java.version>11</java.version>

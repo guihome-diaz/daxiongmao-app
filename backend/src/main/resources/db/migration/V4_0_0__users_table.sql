@@ -14,7 +14,8 @@ CREATE TABLE USERS
     DATE_EMAIL_CONFIRMED        TIMESTAMP NULL,
     PASSWORD_HASH               VARCHAR2(255 CHAR),
     PASSWORD_SALT               VARCHAR2(255 CHAR)   CONSTRAINT "C_NN_USERS_PWD_SALT" NOT NULL,
-    PASSWORD_ALGORITHM          VARCHAR2(50 CHAR)    CONSTRAINT "C_NN_USERS_PWD_ALGO" NOT NULL,
+    HASH_ALGORITHM              VARCHAR2(50 CHAR)    CONSTRAINT "C_NN_USERS_HASH_ALGO" NOT NULL,
+    SALT_ALGORITHM              VARCHAR2(50 CHAR)    CONSTRAINT "C_NN_USERS_SALT_ALGO" NOT NULL,
     PASSWORD_LAST_CHANGE        TIMESTAMP NULL,
     CREATION_DATE               TIMESTAMP            DEFAULT SYSDATE CONSTRAINT "C_NN_USERS_CREATION_DATE" NOT NULL,
     MODIFICATION_DATE           TIMESTAMP            DEFAULT SYSDATE CONSTRAINT "C_NN_USERS_MODIFICATION_DATE" NOT NULL,
@@ -41,7 +42,8 @@ COMMENT ON COLUMN USERS.ACTIVATION_KEY        IS 'Activation key. MANDATORY. Thi
 COMMENT ON COLUMN USERS.DATE_EMAIL_CONFIRMED  IS 'To know when the user confirmed his email - if he did so. This is required for anti-phishing reasons';
 COMMENT ON COLUMN USERS.PASSWORD_HASH         IS 'User password. This can be let NULL if user wants to validate his email first. Important: like all modern apps, we do NOT store the user password';
 COMMENT ON COLUMN USERS.PASSWORD_SALT         IS 'Security salt. MANDATORY. (random value) that is required to compute the user password hash. Every user have different salts';
-COMMENT ON COLUMN USERS.PASSWORD_ALGORITHM    IS 'Password hash algorithm. MANDATORY. This is required to compute the password hash. Security can change over time, that is why we must store the algorithm used for each user';
+COMMENT ON COLUMN USERS.HASH_ALGORITHM        IS 'Password hash algorithm. MANDATORY. This is required to compute the password hash. Security can change over time, that is why we must store the algorithm used for each user';
+COMMENT ON COLUMN USERS.SALT_ALGORITHM        IS 'Salt (secure random) algorithm. MANDATORY. This is required to compute the password hash. Security can change over time, that is why we must store the algorithm used for each user';
 COMMENT ON COLUMN USERS.PASSWORD_LAST_CHANGE  IS 'Date time of the last password change. This is important to notify user to change his password periodically for security reasons';
 COMMENT ON COLUMN USERS.IS_ACTIVE             IS 'Boolean flag. MANDATORY. "1" to use the object, "0" to block usage';
 COMMENT ON COLUMN USERS.CREATION_DATE         IS 'Object creation date-time';
