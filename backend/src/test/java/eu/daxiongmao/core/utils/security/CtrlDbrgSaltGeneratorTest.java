@@ -3,9 +3,7 @@ package eu.daxiongmao.core.utils.security;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,9 +12,9 @@ import java.util.Set;
  * @version 1.0
  * @since 2020/03
  */
-public class SaltGeneratorTest {
+public class CtrlDbrgSaltGeneratorTest {
 
-    private SaltGeneratorUtil saltGeneratorUtil = new SaltGeneratorUtil();
+    private CtrDrbgSaltGenerator saltGeneratorUtil = new CtrDrbgSaltGenerator();
 
     /**
      * To generate a lot of salt, enough to force reseed.
@@ -25,7 +23,7 @@ public class SaltGeneratorTest {
     public void generateSaltsAndTriggerReseed() {
         final int saltSize = 128;
         Set<String> salts = new HashSet<>();
-        for (int i = 0 ; i < (SaltGeneratorUtil.NUMBER_OF_ITERATIONS_BEFORE_RESEED + 2); i++) {
+        for (int i = 0; i < (CtrDrbgSaltGenerator.NUMBER_OF_ITERATIONS_BEFORE_RESEED + 2); i++) {
             final String newSalt = saltGeneratorUtil.generateSalt(saltSize);
             // Ensure each salt is unique
             Assertions.assertFalse(salts.contains(newSalt));
@@ -55,11 +53,10 @@ public class SaltGeneratorTest {
     public void getSaltAlgorithmName() {
         final String saltAlgorithm = saltGeneratorUtil.getSaltAlgorithm();
         Assertions.assertNotNull(saltAlgorithm);
-        System.out.println(saltAlgorithm);
-        Assertions.assertTrue(saltAlgorithm.contains(SaltGeneratorUtil.SECURE_RANDOM_MECHANISM));
-        Assertions.assertTrue(saltAlgorithm.contains(SaltGeneratorUtil.SECURE_RANDOM_GENERATOR_TYPE));
-        Assertions.assertTrue(saltAlgorithm.contains(SaltGeneratorUtil.SECURE_RANDOM_ALGORITHM));
-        Assertions.assertTrue(saltAlgorithm.contains(SaltGeneratorUtil.SECURE_RANDOM_COMMENTS));
+        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_MECHANISM));
+        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_GENERATOR_TYPE));
+        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_ALGORITHM));
+        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_COMMENTS));
     }
 
     @Test
@@ -74,7 +71,7 @@ public class SaltGeneratorTest {
 
         // not enough size
         try {
-            saltGeneratorUtil.generateSalt(SaltGeneratorUtil.MINIMUM_SALT_SIZE - 1);
+            saltGeneratorUtil.generateSalt(CtrDrbgSaltGenerator.MINIMUM_SALT_SIZE - 1);
             Assertions.fail("Failure expected: too short SALT size");
         } catch (IllegalArgumentException e) {
             // OK
@@ -82,7 +79,7 @@ public class SaltGeneratorTest {
 
         // Success
         try {
-            final String salt = saltGeneratorUtil.generateSalt(SaltGeneratorUtil.MINIMUM_SALT_SIZE);
+            final String salt = saltGeneratorUtil.generateSalt(CtrDrbgSaltGenerator.MINIMUM_SALT_SIZE);
             Assertions.assertNotNull(salt);
         } catch (IllegalArgumentException e) {
             Assertions.fail("If should not fail");

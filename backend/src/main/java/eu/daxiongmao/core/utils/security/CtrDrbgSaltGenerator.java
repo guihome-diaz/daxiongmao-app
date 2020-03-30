@@ -12,7 +12,7 @@ import sun.security.provider.MoreDrbgParameters;
 
 /**
  * <p>
- * To generate and decode application SALT.<br>
+ * To generate and decode application SALT, <u>this implementation uses <strong>Block Cipher based: CTR_DRBG</strong></u>.<br>
  * For security reasons some parameters are hard-coded.<br>
  * <strong>Security over performances</strong>: to ensure the random numbers always are random this class is thread-safe.
  * Unfortunately it uses a synchronized block, see {@link #getSecureRandom()}<br>
@@ -27,7 +27,7 @@ import sun.security.provider.MoreDrbgParameters;
  */
 @Log4j2
 @Component
-public class SaltGeneratorUtil {
+public class CtrDrbgSaltGenerator implements ISaltGenerator {
 
     /** Custom note to put on SALT algorithm name */
     static final String SECURE_RANDOM_COMMENTS = "base64 encoding, config 2020-03";
@@ -73,14 +73,7 @@ public class SaltGeneratorUtil {
     /** Number of seeds that have been generated with the current Secure Random. A new Random value will have to be issued after some seeds generation. */
     private AtomicInteger numberOfSeedGenerated = new AtomicInteger(0);
 
-    /**
-     * To generate a new SALT using current Secure Random algorithm.
-     * @param saltSize salt size. <br>
-     *                 The salt needs to be long, so that there are many possible salts.<br>
-     *                 -> As a rule of thumb, make your salt at least as long as the hash function's output.
-     * @return new SALT encoded in Base64
-     * @throws IllegalArgumentException requested SALT length does not match minimum security requirements. See {@link #MINIMUM_SALT_SIZE}
-     */
+    @Override
     public String generateSalt(final int saltSize) {
         // Security: ensure requested salt is not too small
         if (saltSize < MINIMUM_SALT_SIZE) {
@@ -106,10 +99,7 @@ public class SaltGeneratorUtil {
         return salt;
     }
 
-    /**
-     * To get current salt's algorithm
-     * @return current salt algorithm
-     */
+    @Override
     public String getSaltAlgorithm() {
         return String.format("SecureRandom: {Algorithm: %s | Provider: %s | Parameters: %s | Misc: %s, %s}, Comments: %s", getSecureRandom().getAlgorithm(), getSecureRandom().getProvider(), getSecureRandom().getParameters(), SECURE_RANDOM_MECHANISM, SECURE_RANDOM_ALGORITHM, SECURE_RANDOM_COMMENTS);
     }
@@ -133,12 +123,7 @@ public class SaltGeneratorUtil {
         return encoder.encodeToString(saltBytes);
     }
     
-    /**
-     * To decode the salt into byte array for hash computation
-     * (i) don't forget to adjust the {@link #encodeSalt(byte[])} method if you change that part
-     * @param encodedSalt encode salt
-     * @return corresponding salt as byte array
-     */
+    @Override
     public byte[] decodeSalt(final String encodedSalt) {
         if (StringUtils.isBlank(encodedSalt)) {
             throw new IllegalArgumentException("Cannot decode NULL or empty salt. You must provide a valid value to decode");
