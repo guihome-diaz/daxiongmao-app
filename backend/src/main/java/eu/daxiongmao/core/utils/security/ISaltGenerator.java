@@ -19,13 +19,14 @@ public interface ISaltGenerator {
      * @param saltSize salt size. <br>
      *                 The salt needs to be long, so that there are many possible salts.<br>
      *                 -> As a rule of thumb, make your salt at least as long as the hash function's output.
-     * @return new SALT encoded in Base64
-     * @throws IllegalArgumentException requested SALT length does not match minimum security requirements. See {@link #MINIMUM_SALT_SIZE}
+     * @return new SALT encoded in Base64.<br>
+     *         careful: result string is longer that requested size: result_size = (3 * (LengthInCharacters / 4)) - (numberOfPaddingCharacters)
+     * @throws IllegalArgumentException requested SALT length does not match minimum security requirements
      */
     String generateSalt(int saltSize);
 
     /**
-     * To get current salt's algorithm
+     * To get current salt algorithm
      * @return current salt algorithm description
      */
     String getSaltAlgorithm();

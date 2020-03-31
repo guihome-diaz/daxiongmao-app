@@ -73,6 +73,12 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
     /** Number of seeds that have been generated with the current Secure Random. A new Random value will have to be issued after some seeds generation. */
     private AtomicInteger numberOfSeedGenerated = new AtomicInteger(0);
 
+    /** To encode binary salt (byte[]) in base64 String format. */
+    final Base64.Encoder encoder = Base64.getUrlEncoder();
+
+    /** To decode a base64 String salt representation into binary (byte[]) */
+    private final Base64.Decoder decoder = Base64.getUrlDecoder();
+
     @Override
     public String generateSalt(final int saltSize) {
         // Security: ensure requested salt is not too small
@@ -91,7 +97,7 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
         getSecureRandom().nextBytes(randomValue);
 
         // Encode result
-        final String salt = encodeSalt(randomValue);
+        final String salt = encoder.encodeToString(randomValue);
 
         // Increment counter
         numberOfSeedGenerated.incrementAndGet();
@@ -103,33 +109,12 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
     public String getSaltAlgorithm() {
         return String.format("SecureRandom: {Algorithm: %s | Provider: %s | Parameters: %s | Misc: %s, %s}, Comments: %s", getSecureRandom().getAlgorithm(), getSecureRandom().getProvider(), getSecureRandom().getParameters(), SECURE_RANDOM_MECHANISM, SECURE_RANDOM_ALGORITHM, SECURE_RANDOM_COMMENTS);
     }
-
-    /**
-     * To encode the salt into String representation.
-     * <p>
-     * This will encode the salt in Base64 for String representation.
-     * It use Java <code>URL encoder</code> to NOT process special characters such as "\n"
-     * (i) don't forget to adjust the {@link #decodeSalt(String)} method if you change that part
-     * </p>
-     * @param saltBytes byte array value to encode
-     * @return SALT representation as a String
-     */
-    String encodeSalt(final byte[] saltBytes) {
-        if (saltBytes == null || saltBytes.length < MINIMUM_SALT_SIZE) {
-            throw new IllegalArgumentException("SALT must be, at least, " + MINIMUM_SALT_SIZE + " bytes long");
-        }
-
-        final Base64.Encoder encoder = Base64.getUrlEncoder();
-        return encoder.encodeToString(saltBytes);
-    }
     
     @Override
     public byte[] decodeSalt(final String encodedSalt) {
         if (StringUtils.isBlank(encodedSalt)) {
             throw new IllegalArgumentException("Cannot decode NULL or empty salt. You must provide a valid value to decode");
         }
-
-        Base64.Decoder decoder = Base64.getUrlDecoder();
         return decoder.decode(encodedSalt);
     }
 

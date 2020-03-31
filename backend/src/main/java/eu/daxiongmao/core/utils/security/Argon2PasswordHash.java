@@ -3,9 +3,10 @@ package eu.daxiongmao.core.utils.security;
 import lombok.extern.log4j.Log4j2;
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
 import org.bouncycastle.crypto.params.Argon2Parameters;
-import org.bouncycastle.util.Strings;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Component;
+
+import java.util.Base64;
 
 /**
  * <p>
@@ -23,14 +24,7 @@ import org.springframework.stereotype.Component;
  */
 @Log4j2
 @Component
-public class Argon2PasswordHashUtil {
-
-    /** Tradeoff resilience.
-     *  Despite high performance, Argon2 provides reasonable level of tradeoff resilience.
-     *  With default number of passes over memory (1 forArgon2d, 3 forArgon2i) an ASIC-equipped
-     *  adversary can not decrease the time-area product if the memory is reduced by the factor of 4 or more.
-     */
-    private static final int NUMBER_OF_ITERATIONS = 3;
+public class Argon2PasswordHash implements IPasswordHash {
 
     /**
      * <p>
@@ -50,8 +44,14 @@ public class Argon2PasswordHashUtil {
     /** Algorithm version. the higher, the better. */
     private static final int ARGON2_VERSION = Argon2Parameters.ARGON2_VERSION_13;
 
-    /** Number of iterations to perform.
-     * Designers recommends 3 iterations, at least, to be memory proof.
+    /** <p>
+     * Number of iterations to perform.
+     * Designers recommends 3 iterations, at least, to be memory proof.</p>
+     * </p>
+     * <p>this is also called <strong>Tradeoff resilience.</strong><br>
+     *  Despite high performance, Argon2 provides reasonable level of tradeoff resilience.
+     *  With default number of passes over memory (1 forArgon2d, 3 forArgon2i) an ASIC-equipped
+     *  adversary can not decrease the time-area product if the memory is reduced by the factor of 4 or more.
      */
     private static final int ITERATIONS = 3;
 
@@ -66,12 +66,13 @@ public class Argon2PasswordHashUtil {
      */
     private static final int NUMBER_OF_THREADS = 4;
 
-    /** To hash a password
-     * @param password password to hash
-     * @param hashSize hash size to generate
-     * @param salt a unique, randomly generated string that is added to each password as part of the hashing process. As the salt is unique for every user, an attacker has to crack hashes one at a time using the respective salt, rather than being able to calculate a hash once and compare it against every stored hash. This makes cracking large numbers of hashes significantly harder, as the time required grows in direct proportion to the number of hashes.
-     * @return password hash
-     */
+    /** To encode binary salt (byte[]) in base64 String format. */
+    private final Base64.Encoder encoder = Base64.getUrlEncoder();
+
+    /** To decode a base64 String salt representation into binary (byte[]) */
+    private final Base64.Decoder decoder = Base64.getUrlDecoder();
+
+    @Override
     public String hashPassword(final String password, final int hashSize, final byte[] salt) {
         // algorithm setup
         final Argon2Parameters.Builder builder = new Argon2Parameters.Builder(ARGON2_MODE)
@@ -90,7 +91,11 @@ public class Argon2PasswordHashUtil {
         digester.generateBytes(password.getBytes(), pwdHash);
 
         // encode in hexadecimal
-        return Hex.toHexString(pwdHash);
+        return encoder.encodeToString(pwdHash);
     }
 
+    @Override
+    public String getHashAlgorithm() {
+        return String.format("Password hash: {Algorithm: Argon2i | Provider: BouncyCastle | Version: %s | Iterations: %s | Memory/thread: %s kb | Threads: %s | with salt: yes}, base64 encoding, config 2020-03", ARGON2_VERSION, ITERATIONS, ALLOWED_MEMORY_IN_KB, NUMBER_OF_THREADS);
+    }
 }

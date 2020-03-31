@@ -1,5 +1,6 @@
 package eu.daxiongmao.core.utils.security;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import java.util.Set;
  * @version 1.0
  * @since 2020/03
  */
+@Log4j2
 public class CtrlDbrgSaltGeneratorTest {
 
     private CtrDrbgSaltGenerator saltGeneratorUtil = new CtrDrbgSaltGenerator();
@@ -44,9 +46,21 @@ public class CtrlDbrgSaltGeneratorTest {
         Assertions.assertNotNull(decodeSalt);
 
         // re-encode and check results
-        final String reEncodedSalt = saltGeneratorUtil.encodeSalt(decodeSalt);
+        final String reEncodedSalt = saltGeneratorUtil.encoder.encodeToString(decodeSalt);
         Assertions.assertNotNull(reEncodedSalt);
         Assertions.assertEquals(newSalt, reEncodedSalt);
+    }
+
+    /**
+     * To generate a SALT and check its length
+     */
+    @Test
+    public void generateSalt() {
+        final int saltSize = 128;
+        final String newSalt = saltGeneratorUtil.generateSalt(saltSize);
+        Assertions.assertNotNull(newSalt);
+        log.debug("example of generated salt: {}", newSalt);
+        Assertions.assertEquals( 172, newSalt.length());
     }
 
     @Test
