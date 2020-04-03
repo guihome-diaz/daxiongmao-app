@@ -1,3 +1,24 @@
+# Daxiongma application
+
+Application to quick start projects and demonstrate skills.
+
+Licensed under The MIT License
+
+--------------------------
+
+## Status
+
+[![Build Status](https://travis-ci.org/guihome-diaz/daxiongmao-app.svg?branch=master)](https://travis-ci.org/guihome-diaz/daxiongmao-app)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bdfa706c3ea347c8b3814243ef026903)](https://www.codacy.com/manual/guihome-diaz/daxiongmao-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guihome-diaz/daxiongmao-app&amp;utm_campaign=Badge_Grade)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bdfa706c3ea347c8b3814243ef026903)](https://www.codacy.com/manual/guihome-diaz/daxiongmao-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guihome-diaz/daxiongmao-app&amp;utm_campaign=Badge_Coverage)
+
+## Authors
+Project history:
+- Created by **Daniel Glasson** on 18/05/2014
+- Fork by **Guillaume Diaz** on 22/07/2019
+
 
 
 Requirements:
