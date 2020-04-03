@@ -14,7 +14,7 @@ import java.util.Set;
  * @since 2020/03
  */
 @Log4j2
-public class CtrlDbrgSaltGeneratorTest {
+public class CtrDbrgSaltGeneratorTest {
 
     private CtrDrbgSaltGenerator saltGeneratorUtil = new CtrDrbgSaltGenerator();
 
@@ -66,10 +66,8 @@ public class CtrlDbrgSaltGeneratorTest {
     @Test
     public void getSaltAlgorithmName() {
         final String saltAlgorithm = saltGeneratorUtil.getSaltAlgorithm();
+        log.info("Secure random salt generator = {}", saltAlgorithm);
         Assertions.assertNotNull(saltAlgorithm);
-        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_MECHANISM));
-        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_GENERATOR_TYPE));
-        Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_ALGORITHM));
         Assertions.assertTrue(saltAlgorithm.contains(CtrDrbgSaltGenerator.SECURE_RANDOM_COMMENTS));
     }
 

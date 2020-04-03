@@ -18,7 +18,7 @@ public interface ISaltGenerator {
      * To generate a new SALT using current Secure Random algorithm.
      * @param saltSize salt size. <br>
      *                 The salt needs to be long, so that there are many possible salts.<br>
-     *                 -> As a rule of thumb, make your salt at least as long as the hash function's output.
+     *                 As a rule of thumb, make your salt at least as long as the hash function's output.
      * @return new SALT encoded in Base64.<br>
      *         careful: result string is longer that requested size: result_size = (3 * (LengthInCharacters / 4)) - (numberOfPaddingCharacters)
      * @throws IllegalArgumentException requested SALT length does not match minimum security requirements

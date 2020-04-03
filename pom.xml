@@ -10,8 +10,39 @@
 	<description>Personal application to host various developments tricks, trainings and best practices</description>
 	<packaging>pom</packaging>
 
+	<!-- Legal aspects -->
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<!-- Project author -->
+		<developer>
+			<name>Guillaume Diaz</name>
+			<url>http://www.daxiongmao.eu/wiki</url>
+			<email>guillaume@qin-diaz.com</email>
+			<organization>Daxiongmao.eu</organization>
+			<organizationUrl>https://daxiongmao.eu/wiki</organizationUrl>
+			<timezone>UTC+01:00</timezone>
+		</developer>
+	</developers>
+
+	<!-- Source code original location -->
+	<scm>
+		<url>https://github.com/guihome-diaz/daxiongmao-app</url>
+		<connection>scm:git:git@github.com:guihome-diaz/daxiongmao-app.git</connection>
+		<developerConnection>scm:git:git@github.com:guihome-diaz/daxiongmao-app.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
 	<properties>
 		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<modules>

@@ -29,3 +29,11 @@ Testing
 
 Uses cases:
 * 
+
+
+Tricks: 
+to execute unit test like maven and debug it:
+mvn package -Dtest=Class#method -Dmaven.surefire.debug
+
+ex:
+mvn package -Dtest=Argon2PasswordHashTest#hashEuropeanPassword -Dmaven.surefire.debug

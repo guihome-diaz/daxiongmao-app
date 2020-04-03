@@ -1,14 +1,14 @@
 package eu.daxiongmao.core.utils.security;
 
 import lombok.extern.log4j.Log4j2;
-
-import java.security.*;
-import java.util.Base64;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import sun.security.provider.MoreDrbgParameters;
+
+import java.security.DrbgParameters;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.util.Base64;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
@@ -21,38 +21,31 @@ import sun.security.provider.MoreDrbgParameters;
  * <p>This code is the summary of my understanding of crypto recommendations (study 2020/03).
  * I cannot be held responsible for this code behaviour and side effects. Please review before you use it.
  * </p>
+ *
+ * @author Guillaume Diaz.
  * @version 1.0
  * @since 2020/03, application's creation
- * @author Guillaume Diaz.
  */
 @Log4j2
 @Component
 public class CtrDrbgSaltGenerator implements ISaltGenerator {
 
-    /** Custom note to put on SALT algorithm name */
+    /**
+     * Custom note to put on SALT algorithm name
+     */
     static final String SECURE_RANDOM_COMMENTS = "base64 encoding, config 2020-03";
 
     /**
      * Current algorithm to generate secure random strings for SALT.<br>
-     *     <strong>Deterministic random bit generator (DRBG)</strong><br>
-     *     Definition from <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r4.pdf">US department of commerce # National Institute of Standards and Techology (NIST). See bottom of page 20</a><br>
-     *     This algorithm was introduced in Java 9<br>
-     *     A random bit generator that includes a DRBG algorithm and (at least initially) has access to a source of randomness.
-     *     The DRBG produces a sequence of bits from a secret initial value called a seed, along with other possible inputs.
-     *     A cryptographic DRBG has the additional property that the output is unpredictable, given that the seed is not known.
-     *     A DRBG is sometimes also called a Pseudo-random Number Generator (PRNG) or a deterministic random number generator.
+     * <strong>Deterministic random bit generator (DRBG)</strong><br>
+     * Definition from <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r4.pdf">US department of commerce # National Institute of Standards and Techology (NIST). See bottom of page 20</a><br>
+     * This algorithm was introduced in Java 9<br>
+     * A random bit generator that includes a DRBG algorithm and (at least initially) has access to a source of randomness.
+     * The DRBG produces a sequence of bits from a secret initial value called a seed, along with other possible inputs.
+     * A cryptographic DRBG has the additional property that the output is unpredictable, given that the seed is not known.
+     * A DRBG is sometimes also called a Pseudo-random Number Generator (PRNG) or a deterministic random number generator.
      */
     static final String SECURE_RANDOM_GENERATOR_TYPE = "DRBG";
-
-    /**
-     * Type of DBRG algo to use. Block Cipher based: CTR_DRBG
-     */
-    static final String SECURE_RANDOM_MECHANISM = "CTR_DRBG";
-
-    /**
-     * For block cipher algorithm (CTR_DBRG) you need a strong encryption algorithm.
-     */
-    static final String SECURE_RANDOM_ALGORITHM = "AES-256";
 
     /**
      * Number of seeds to generate before resetting the secure random.
@@ -61,22 +54,31 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
      */
     static final int NUMBER_OF_ITERATIONS_BEFORE_RESEED = 2048;
 
-    /** Based on current recommendations (bouncy castle, Oracle and various researchers)
+    /**
+     * Based on current recommendations (bouncy castle, Oracle and various researchers)
      * minimum salt size should be 32 bytes.
      */
     static final int MINIMUM_SALT_SIZE = 32;
 
-    /** Current {@link java.security.SecureRandom}
-     * Object to use to generate random numbers */
+    /**
+     * Current {@link java.security.SecureRandom}
+     * Object to use to generate random numbers
+     */
     private final SecureRandom secureRandom = generateSecureRandom();
 
-    /** Number of seeds that have been generated with the current Secure Random. A new Random value will have to be issued after some seeds generation. */
+    /**
+     * Number of seeds that have been generated with the current Secure Random. A new Random value will have to be issued after some seeds generation.
+     */
     private AtomicInteger numberOfSeedGenerated = new AtomicInteger(0);
 
-    /** To encode binary salt (byte[]) in base64 String format. */
+    /**
+     * To encode binary salt (byte[]) in base64 String format.
+     */
     final Base64.Encoder encoder = Base64.getUrlEncoder();
 
-    /** To decode a base64 String salt representation into binary (byte[]) */
+    /**
+     * To decode a base64 String salt representation into binary (byte[])
+     */
     private final Base64.Decoder decoder = Base64.getUrlDecoder();
 
     @Override
@@ -107,9 +109,11 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
 
     @Override
     public String getSaltAlgorithm() {
-        return String.format("SecureRandom: {Algorithm: %s | Provider: %s | Parameters: %s | Misc: %s, %s}, Comments: %s", getSecureRandom().getAlgorithm(), getSecureRandom().getProvider(), getSecureRandom().getParameters(), SECURE_RANDOM_MECHANISM, SECURE_RANDOM_ALGORITHM, SECURE_RANDOM_COMMENTS);
+        return String.format(
+                "SecureRandom: {Algorithm: %s | Provider: %s | Parameters: %s}, Comments: %s",
+                getSecureRandom().getAlgorithm(), getSecureRandom().getProvider(), getSecureRandom().getParameters(), SECURE_RANDOM_COMMENTS);
     }
-    
+
     @Override
     public byte[] decodeSalt(final String encodedSalt) {
         if (StringUtils.isBlank(encodedSalt)) {
@@ -118,15 +122,19 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
         return decoder.decode(encodedSalt);
     }
 
-    /** To retrieve the random generator */
+    /**
+     * To retrieve the random generator
+     */
     private synchronized SecureRandom getSecureRandom() {
         return this.secureRandom;
     }
 
-    /** To initialize the secure random algorithm.
+    /**
+     * To initialize the secure random algorithm.
      * User will be able to generate random number after initialization.
      * For security reason it is recommended to reseed the algorithm periodically.
      * -> This can be time based or usage based (current solution)
+     *
      * @return secure random utility to use to generate random numbers
      */
     private SecureRandom generateSecureRandom() {
@@ -145,10 +153,17 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
             // * Advanced # Force use of derivation (only applicable to CTR_DRBG)
             Security.setProperty("securerandom.drbg.config", "CTR_DRBG");
             final DrbgParameters.Instantiation genericDbrgParameters = DrbgParameters.instantiation(256, DrbgParameters.Capability.PR_AND_RESEED, SECURE_RANDOM_COMMENTS.getBytes());
-            final SecureRandomParameters advanceDbrgParameters = new MoreDrbgParameters(null, SECURE_RANDOM_MECHANISM, SECURE_RANDOM_ALGORITHM, null, true, genericDbrgParameters);
+
+            /* The actual configuration class is not public :( */
+            /* Type of DBRG algo to use. Block Cipher based: CTR_DRBG */
+            //final String SECURE_RANDOM_MECHANISM = "CTR_DRBG";
+            /* For block cipher algorithm (CTR_DBRG) you need a strong encryption algorithm. */
+            //final String SECURE_RANDOM_ALGORITHM = "AES-256";
+            /* set advanced parameters */
+            // final SecureRandomParameters advanceDbrgParameters = new MoreDrbgParameters(null, SECURE_RANDOM_MECHANISM, SECURE_RANDOM_ALGORITHM, null, true, genericDbrgParameters);
 
             // Select random algorithm
-            return SecureRandom.getInstance(SECURE_RANDOM_GENERATOR_TYPE, advanceDbrgParameters);
+            return SecureRandom.getInstance(SECURE_RANDOM_GENERATOR_TYPE, genericDbrgParameters);
         } catch (Exception e) {
             log.error("Failed to initialize the secure random generator", e);
             throw new RuntimeException(e);

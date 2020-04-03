@@ -17,6 +17,8 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<dependencies>
@@ -113,8 +115,8 @@
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
-					<groupId>org.junit.vintage</groupId>
 					<artifactId>junit-vintage-engine</artifactId>
+					<groupId>org.junit.vintage</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -122,6 +124,120 @@
 
 	<build>
 		<plugins>
+			<!-- Compilation settings -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>${java.version}</release>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- To execute UNIT tests [mocks and simple, quick tests] -->
+			<!-- By default, the Surefire Plugin will automatically include all test classes with the following wildcard patterns:
+				**/Test*.java - includes all of its subdirectories and all Java filenames that start with "Test"
+				**/*Test.java - includes all of its subdirectories and all Java filenames that end with "Test"
+				**/*Tests.java - includes all of its subdirectories and all Java filenames that end with "Tests"
+				**/*TestCase.java - includes all of its subdirectories and all Java filenames that end with "TestCase"
+				 Integration tests patterns have been manual excluded as safety
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<argLine>
+						--illegal-access=permit
+					</argLine>
+					<excludes>
+						<exclude>**/*TestAPI</exclude>
+						<exclude>**/*IntegrationTest</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- To execute INTEGRATON tests [tests that should run against real datasource, long tests] -->
+			<!-- By default, the Failsafe Plugin will automatically include all test classes with the following wildcard patterns:
+    				**/IT*.java - includes all of its subdirectories and all Java filenames that start with "IT".
+    				**/*IT.java - includes all of its subdirectories and all Java filenames that end with "IT".
+    				**/*ITCase.java - includes all of its subdirectories and all Java filenames that end with "ITCase".
+				If the test classes do not follow any of these naming conventions, then configure Failsafe Plugin and specify the tests you want to include.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<argLine>
+						--illegal-access=permit
+					</argLine>
+					<includes>
+						<include>**/*TestAPI</include>
+						<include>**/*IntegrationTest</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- Generate source artifact to upload along the binaries, this help debug mode -->
+			<!-- This is mandatory for publication on Maven Central -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Generate javadoc to ease API browsing -->
+			<!-- This is mandatory for publication on Maven Central -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<sourcepath>src/main/java</sourcepath>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--  To generate test coverage reports (for Codacy & Sonarqube) -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

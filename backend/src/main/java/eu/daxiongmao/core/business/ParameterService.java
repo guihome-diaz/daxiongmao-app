@@ -83,8 +83,8 @@ public class ParameterService {
      * To retrieve a parameter VALUE by its name.
      * This will use the local cache
      * @param paramName search parameter
-     * @param viewSensitiveParam boolean => "true" to view sensitive parameters ; "false" to hide sensitive parameters such as password. This is highly recommended for controllers
-     * @param viewDisabledParam boolean => "true" to view disable parameters ; "false" to only show ACTIVE parameters
+     * @param viewSensitiveParam boolean, "true" to view sensitive parameters ; "false" to hide sensitive parameters such as password. This is highly recommended for controllers
+     * @param viewDisabledParam boolean, "true" to view disable parameters ; "false" to only show ACTIVE parameters
      * @return corresponding value or null
      */
     public Optional<Object> getValueByName(final String paramName, boolean viewSensitiveParam, boolean viewDisabledParam) {
@@ -109,8 +109,8 @@ public class ParameterService {
      * To retrieve a parameter by its name.
      * This will use the local cache
      * @param paramName search parameter
-     * @param viewSensitiveParam boolean => "true" to view sensitive parameters ; "false" to hide sensitive parameters such as password. This is highly recommended for controllers
-     * @param viewDisabledParam boolean => "true" to view disable parameters ; "false" to only show ACTIVE parameters
+     * @param viewSensitiveParam boolean, "true" to view sensitive parameters ; "false" to hide sensitive parameters such as password. This is highly recommended for controllers
+     * @param viewDisabledParam boolean, "true" to view disable parameters ; "false" to only show ACTIVE parameters
      * @return corresponding DTO or null
      */
     public Optional<ParameterDTO> getParamByName(final String paramName, boolean viewSensitiveParam, boolean viewDisabledParam) {
@@ -138,8 +138,8 @@ public class ParameterService {
 
     /**
      * To retrieve all parameters at once
-     * @param viewSensitiveParams boolean => "true" to view sensitive parameters ; "false" to hide sensitive parameters such as password. This is highly recommended for controllers
-     * @param viewDisabledParam boolean => "true" to view disable parameters ; "false" to only show ACTIVE parameters
+     * @param viewSensitiveParams boolean, "true" to view sensitive parameters ; "false" to hide sensitive parameters such as password. This is highly recommended for controllers
+     * @param viewDisabledParam boolean, "true" to view disable parameters ; "false" to only show ACTIVE parameters
      * @return corresponding DTOs or null
      */
     public List<ParameterDTO> getAll(boolean viewSensitiveParams, boolean viewDisabledParam) {
