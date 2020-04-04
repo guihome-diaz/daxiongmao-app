@@ -137,51 +137,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- To execute UNIT tests [mocks and simple, quick tests] -->
-			<!-- By default, the Surefire Plugin will automatically include all test classes with the following wildcard patterns:
-				**/Test*.java - includes all of its subdirectories and all Java filenames that start with "Test"
-				**/*Test.java - includes all of its subdirectories and all Java filenames that end with "Test"
-				**/*Tests.java - includes all of its subdirectories and all Java filenames that end with "Tests"
-				**/*TestCase.java - includes all of its subdirectories and all Java filenames that end with "TestCase"
-				 Integration tests patterns have been manual excluded as safety
-			-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<argLine>
-						--illegal-access=permit
-					</argLine>
-					<excludes>
-						<exclude>**/*TestAPI</exclude>
-						<exclude>**/*IntegrationTest</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-
-			<!-- To execute INTEGRATON tests [tests that should run against real datasource, long tests] -->
-			<!-- By default, the Failsafe Plugin will automatically include all test classes with the following wildcard patterns:
-    				**/IT*.java - includes all of its subdirectories and all Java filenames that start with "IT".
-    				**/*IT.java - includes all of its subdirectories and all Java filenames that end with "IT".
-    				**/*ITCase.java - includes all of its subdirectories and all Java filenames that end with "ITCase".
-				If the test classes do not follow any of these naming conventions, then configure Failsafe Plugin and specify the tests you want to include.
-			-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<argLine>
-						--illegal-access=permit
-					</argLine>
-					<includes>
-						<include>**/*TestAPI</include>
-						<include>**/*IntegrationTest</include>
-					</includes>
-				</configuration>
-			</plugin>
-
 			<!-- Generate source artifact to upload along the binaries, this help debug mode -->
 			<!-- This is mandatory for publication on Maven Central -->
 			<plugin>
@@ -217,32 +172,158 @@
 				</executions>
 			</plugin>
 
-			<!--  To generate test coverage reports (for Codacy & Sonarqube) -->
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+
+		<!-- Custom profile to execute all tests and generate quality reports -->
+		<profile>
+			<id>quality_control</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<maven.surefire.failsafe.version>2.22.2</maven.surefire.failsafe.version>
+				<maven.jacoco.version>0.8.5</maven.jacoco.version>
+
+				<jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+				<!-- Unit tests -->
+				<jacoco.utReportPath>${project.build.directory}/jacoco</jacoco.utReportPath>
+				<jacoco.utReportFile>${jacoco.utReportPath}/jacoco.exec</jacoco.utReportFile>
+				<!-- Integration tests -->
+				<jacoco.itReportPath>${project.build.directory}/jacoco</jacoco.itReportPath>
+				<jacoco.itReportFile>${jacoco.itReportPath}/jacoco-it.exec</jacoco.itReportFile>
+
+			</properties>
+
+
+			<build>
+				<plugins>
+
+					<!-- JACOCO test coverage plugin.
+                         Use it with SUREFIRE (unit tests) and FAILSAFE (integration tests) to generate test reports
+                         All reports are generated and aggregated in "${project.build.directory}/jacoco/*" by configuration
+                         Good documentations:
+                            https://wiki.onap.org/display/DW/Implementing+Code+Coverage
+                            https://www.devcon5.ch/en/blog/2015/05/29/multi-module-integration-test-coverage-sonar-jacoco/
+                            https://www.eclemma.org/jacoco/trunk/doc/maven.html
+                            http://www.daxiongmao.eu/wiki/index.php?title=Sonar_%2B_maven_configuration_%2B_Jenkins [my personal blog (Guillaume Diaz, daxiongmao.eu)]
+                            https://www.adictosaltrabajo.com/2018/04/12/integracion-de-un-proyecto-de-github-con-travis-y-codacy/
+                         -->
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>${maven.jacoco.version}</version>
+						<executions>
+							<!-- ## UNIT TESTS ## -->
+							<!-- Configure JaCoCo runtime agent. It is passed as VM argument when Maven SUREFIRE plugin is executed. -->
+							<execution>
+								<id>pre-unit-tests</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+								<configuration>
+									<propertyName>jacocoSurefireArgLine</propertyName>
+									<destFile>${jacoco.utReportFile}</destFile>
+									<append>true</append>
+								</configuration>
+							</execution>
+							<execution>
+								<id>post-unit-test</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${jacoco.utReportPath}</outputDirectory>
+									<dataFile>${jacoco.utReportFile}</dataFile>
+								</configuration>
+							</execution>
+							<!-- ## INTEGRATION TESTS ## -->
+							<!-- Configure JaCoCo runtime agent. It is passed as VM argument when Maven FAILSAFE plugin is executed. -->
+							<execution>
+								<id>pre-integration-tests</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>prepare-agent-integration</goal>
+								</goals>
+								<configuration>
+									<propertyName>jacocoFailsafeArgLine</propertyName>
+									<destFile>${jacoco.itReportFile}</destFile>
+									<append>true</append>
+								</configuration>
+							</execution>
+							<execution>
+								<id>post-integration-test</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${jacoco.itReportPath}</outputDirectory>
+									<dataFile>${jacoco.itReportFile}</dataFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<!-- To execute UNIT tests [mocks and simple, quick tests] -->
+					<!-- By default, the Surefire Plugin will automatically include all test classes with the following wildcard patterns:
+                        **/Test*.java - includes all of its subdirectories and all Java filenames that start with "Test"
+                        **/*Test.java - includes all of its subdirectories and all Java filenames that end with "Test"
+                        **/*Tests.java - includes all of its subdirectories and all Java filenames that end with "Tests"
+                        **/*TestCase.java - includes all of its subdirectories and all Java filenames that end with "TestCase"
+                         Integration tests patterns have been manual excluded as safety
+                    -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven.surefire.failsafe.version}</version>
+						<configuration>
+							<argLine>
+								--illegal-access=permit ${jacocoSurefireArgLine}
+							</argLine>
+							<excludes>
+								<exclude>**/*TestAPI</exclude>
+								<exclude>**/*IntegrationTest</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+
+					<!-- To execute INTEGRATON tests [tests that should run against real datasource, long tests] -->
+					<!-- By default, the Failsafe Plugin will automatically include all test classes with the following wildcard patterns:
+                            **/IT*.java - includes all of its subdirectories and all Java filenames that start with "IT".
+                            **/*IT.java - includes all of its subdirectories and all Java filenames that end with "IT".
+                            **/*ITCase.java - includes all of its subdirectories and all Java filenames that end with "ITCase".
+                        If the test classes do not follow any of these naming conventions, then configure Failsafe Plugin and specify the tests you want to include.
+                    -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>${maven.surefire.failsafe.version}</version>
+						<configuration>
+							<argLine>
+								--illegal-access=permit ${jacocoFailsafeArgLine}
+							</argLine>
+							<includes>
+								<include>**/*TestAPI</include>
+								<include>**/*IntegrationTest</include>
+							</includes>
+						</configuration>
+					</plugin>
+
+
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
