@@ -27,7 +27,7 @@ before_cache:
 # Download codacity artifact
 before_install:
   - sudo apt-get install jq
-  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
+  - wget https://github.com/codacy/codacy-coverage-reporter/releases/download/7.6.7/codacy-coverage-reporter-assembly-7.6.7.jar -O ~/codacy-coverage-reporter-assembly.jar
 
 
 # Override default install with settings
@@ -36,4 +36,4 @@ install:
 
 # Send quality report
 after_success:
-  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r **/target/jacoco/jacoco.xml
+  - java -jar ~/codacy-coverage-reporter-assembly.jar report -l Java -r **/target/jacoco/jacoco.xml
