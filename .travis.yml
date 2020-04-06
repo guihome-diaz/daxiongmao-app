@@ -36,4 +36,4 @@ install:
 
 # Send quality report
 after_success:
-  - java -jar ~/codacy-coverage-reporter-assembly.jar report -l Java -r **/target/jacoco/jacoco.xml
+  - java -jar ~/codacy-coverage-reporter-assembly.jar report -l Java -r backend/target/jacoco/jacoco.xml
