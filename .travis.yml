@@ -1,6 +1,6 @@
 language: java
 # Disable advanced operation: this operation does not required elevated rights
-#sudo: false
+sudo: false
 jdk:
   #- oraclejdk8
   - oraclejdk11
@@ -24,12 +24,9 @@ cache:
 before_cache:
   - rm -rf $HOME/.m2/repository/eu/daxiongmao
 
-# Download codacity artifact
-before_install:
-  - sudo apt-get install jq
-  - bash <(wget -q -O - https://coverage.codacy.com/get.sh)
-  - ls -l
 
+#before_install:
+#  -
 
 # Override default install with settings
 install:
@@ -41,4 +38,4 @@ after_success:
   - find . -name jacoco.xml
   - echo "Listing all target jacoco"
   - ls -l */**/target/jacoco
-  - ./codacy-coverage-reporter report -l Java -r backend/target/jacoco/jacoco.xml
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Java -r backend/target/jacoco/jacoco.xml
