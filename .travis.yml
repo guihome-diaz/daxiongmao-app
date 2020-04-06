@@ -32,10 +32,7 @@ before_cache:
 install:
   - mvn --settings .travis/settings.xml install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
 
-# Send quality report
+# Send quality report to CODACY
 after_success:
-  - echo "Listing jacoco files"
-  - find . -name jacoco.xml
-  - echo "Listing all target jacoco"
-  - ls -l */**/target/jacoco
-  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Java -r backend/target/jacoco/jacoco.xml
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Java -r backend/target/jacoco/jacoco.xml --partial
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh) final
