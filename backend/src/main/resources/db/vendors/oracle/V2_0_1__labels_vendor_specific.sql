@@ -4,7 +4,7 @@
 CREATE INDEX LABELS_CODE_IDX               ON LABELS (UPPER(CODE));
 CREATE INDEX LABELS_ACTIVE_CODE_IDX        ON LABELS (UPPER(CODE), IS_ACTIVE);
 
--- Trigger for modification date
+-- Modification date event handling
 CREATE OR REPLACE TRIGGER LABELS_TRIGGER_UPDATE BEFORE UPDATE ON LABELS
 for each row
     begin

@@ -13,7 +13,7 @@ Licensed under [The MIT License](https://choosealicense.com/licenses/mit/)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bdfa706c3ea347c8b3814243ef026903)](https://www.codacy.com/manual/guihome-diaz/daxiongmao-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guihome-diaz/daxiongmao-app&amp;utm_campaign=Badge_Grade)
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bdfa706c3ea347c8b3814243ef026903)](https://www.codacy.com/manual/guihome-diaz/daxiongmao-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guihome-diaz/daxiongmao-app&amp;utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/bdfa706c3ea347c8b3814243ef026903)](https://www.codacy.com/manual/guihome-diaz/daxiongmao-app?utm_source=github.com&utm_medium=referral&utm_content=guihome-diaz/daxiongmao-app&utm_campaign=Badge_Coverage)
 
 ## Application purpose and use-cases
 This quick-start application contains the following use-cases:
