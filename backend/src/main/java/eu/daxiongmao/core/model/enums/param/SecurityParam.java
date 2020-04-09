@@ -1,8 +1,5 @@
 package eu.daxiongmao.core.model.enums.param;
 
-
-import eu.daxiongmao.core.model.enums.param.IParameterEnum;
-
 /**
  * List of security parameters in database.
  * @author Guillaume Diaz

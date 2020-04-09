@@ -1,9 +1,6 @@
 package eu.daxiongmao.core.model.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.Email;
@@ -22,6 +19,7 @@ import java.util.Date;
 @Setter
 @ToString(of = { "firstName", "lastName", "langCode", "username", "email", "phoneNumber", "status", "isActive", "emailConfirmationDate", "passwordLastChangeDate" })
 @EqualsAndHashCode(of = {"username", "email", "langCode"})
+@NoArgsConstructor
 public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 20191205L;
@@ -90,8 +88,5 @@ public class UserDTO implements Serializable {
     /** Object version. This is incremented at each operation */
     private Long version;
 
-    public UserDTO() {
-        super();
-    }
 }
 
