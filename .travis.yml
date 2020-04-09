@@ -7,11 +7,14 @@ jdk:
   - openjdk11
 
 
-################
-# CODACITY INTEGRATION (static code analysis)
-# Requirement: configure TRAVIS build and add the codacity token as environment variable
-#              export CODACY_PROJECT_TOKEN=%Project_Token%
-#####################################
+####################################################################
+# Travis environment variables required for static code analysis
+####################################################################
+# CODACY (https://codacy.com)
+#        export CODACY_PROJECT_TOKEN=%Project_Token%
+# CODECOV (https://codecov.io)
+#        export CODECOV_TOKEN=%repository_token%
+####################################################################
 
 
 # cache the build tool's caches
@@ -33,5 +36,6 @@ after_success:
   # http://codecov.io
   - bash <(curl -s https://codecov.io/bash)
   # http://codacy.com
-  - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Java -r backend/target/jacoco/jacoco.xml --partial
-  - bash <(curl -Ls https://coverage.codacy.com/get.sh) final
+  - bash <(curl -Ls https://coverage.codacy.com/get.sh)
+  #- bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Java -r backend/target/jacoco/jacoco.xml --partial
+  #- bash <(curl -Ls https://coverage.codacy.com/get.sh) final
