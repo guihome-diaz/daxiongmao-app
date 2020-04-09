@@ -1,5 +1,5 @@
 language: java
-# Disable advanced operation: this operation does not required elevated rights
+# Do not run sudoer operations (faster build)
 sudo: false
 jdk:
   #- oraclejdk8
@@ -24,15 +24,14 @@ cache:
 before_cache:
   - rm -rf $HOME/.m2/repository/eu/daxiongmao
 
-
-#before_install:
-#  -
-
 # Override default install with settings
 install:
-  - mvn --settings .travis/settings.xml install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
+  - mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
-# Send quality report to CODACY
+# Send quality reports
 after_success:
+  # http://codecov.io
+  - bash <(curl -s https://codecov.io/bash)
+  # http://codacy.com
   - bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Java -r backend/target/jacoco/jacoco.xml --partial
   - bash <(curl -Ls https://coverage.codacy.com/get.sh) final
