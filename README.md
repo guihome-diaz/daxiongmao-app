@@ -41,7 +41,7 @@ Each use-case includes security, monitoring and tests by design.
 * Business actions, such as log-in / billing / ordering, are audited: WHO does WHAT and WHEN
 * Generic actions, such as page browsing / DB queries / UI actions, are logged in anonymous way for performances and usage tracking
 
-###Testing
+### Testing
 * The application contains *unit tests* (methods tests, mocks) and *integration tests* (Spring tests)
 * Unit tests are fast
 * Integration tests are slower, they are done against an H2 database (in memory).
