@@ -1,6 +1,20 @@
 package eu.daxiongmao.core.utils.security;
 
+
+/**
+ * <p>
+ * Set of utilities to perform secure operations.
+ * </p>
+ *
+ * @author Guillaume Diaz.
+ * @version 1.0
+ * @since 2020/04, application's creation
+ */
 public class SecurityService {
+
+    private SecurityService() {
+        // private factory
+    }
 
     /**
      * <p>To compare 2 data in 'length-constant' time, this is especially useful for hash comparison.</p>
@@ -31,10 +45,11 @@ public class SecurityService {
      * @param b right data block
      * @return true if blocks are identical
      */
-    private static boolean slowEquals(byte[] a, byte[] b) {
+    static boolean slowEquals(byte[] a, byte[] b) {
         int diff = a.length ^ b.length;
-        for (int i = 0; i < a.length && i < b.length; i++)
-        diff |= a[i] ^ b[i];
+        for (int i = 0; i < a.length && i < b.length; i++) {
+            diff |= a[i] ^ b[i];
+        }
         return diff == 0;
     }
 }
