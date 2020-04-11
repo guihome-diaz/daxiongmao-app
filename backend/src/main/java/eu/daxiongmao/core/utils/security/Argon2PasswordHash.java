@@ -3,7 +3,6 @@ package eu.daxiongmao.core.utils.security;
 import lombok.extern.log4j.Log4j2;
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
 import org.bouncycastle.crypto.params.Argon2Parameters;
-import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -68,9 +67,6 @@ public class Argon2PasswordHash implements IPasswordHash {
 
     /** To encode binary salt (byte[]) in base64 String format. */
     private final Base64.Encoder encoder = Base64.getUrlEncoder();
-
-    /** To decode a base64 String salt representation into binary (byte[]) */
-    private final Base64.Decoder decoder = Base64.getUrlDecoder();
 
     @Override
     public String hashPassword(final String password, final int hashSize, final byte[] salt) {

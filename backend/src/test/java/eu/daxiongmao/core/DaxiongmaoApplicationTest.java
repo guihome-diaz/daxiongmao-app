@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class DaxiongmaoApplicationTest {
 
 	@Test
-	void contextLoads() {
+	protected void contextLoads() {
 	}
 
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
  * @version 1.0
  */
 @Log4j2
-public class SecurityServiceTest {
+public class SecurityUtilsTest {
 
     /** To decode a base64 String salt representation into binary (byte[]) */
     private final Base64.Decoder decoder = Base64.getUrlDecoder();
@@ -49,7 +49,7 @@ public class SecurityServiceTest {
         for (int trial = 0 ; trial < testTrials; trial++) {
             final String randomPassword = (trial % 1000 == 0 ? UUID.randomUUID().toString() : "test");
             long startTime = System.nanoTime();
-            SecurityService.slowEquals(randomPassword.getBytes(), hash.getBytes());
+            SecurityUtils.slowEquals(randomPassword.getBytes(), hash.getBytes());
             long endTime = System.nanoTime();
             long testRun = endTime - startTime;
             totalExecutionTimeInNanoSecs += testRun;
@@ -67,7 +67,7 @@ public class SecurityServiceTest {
 
         // Real password
         long startTime = System.nanoTime();
-        SecurityService.slowEquals(dumbPassword.getBytes(), hash.getBytes());
+        SecurityUtils.slowEquals(dumbPassword.getBytes(), hash.getBytes());
         long endTime = System.nanoTime();
         long realPasswordTime = endTime - startTime;
 

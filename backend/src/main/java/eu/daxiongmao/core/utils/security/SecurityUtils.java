@@ -10,9 +10,9 @@ package eu.daxiongmao.core.utils.security;
  * @version 1.0
  * @since 2020/04, application's creation
  */
-public class SecurityService {
+public class SecurityUtils {
 
-    private SecurityService() {
+    private SecurityUtils() {
         // private factory
     }
 
@@ -45,7 +45,7 @@ public class SecurityService {
      * @param b right data block
      * @return true if blocks are identical
      */
-    static boolean slowEquals(byte[] a, byte[] b) {
+    protected static boolean slowEquals(byte[] a, byte[] b) {
         int diff = a.length ^ b.length;
         for (int i = 0; i < a.length && i < b.length; i++) {
             diff |= a[i] ^ b[i];

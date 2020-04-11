@@ -33,7 +33,7 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
     /**
      * Custom note to put on SALT algorithm name
      */
-    static final String SECURE_RANDOM_COMMENTS = "base64 encoding, config 2020-03";
+    protected static final String SECURE_RANDOM_COMMENTS = "base64 encoding, config 2020-03";
 
     /**
      * Current algorithm to generate secure random strings for SALT.<br>
@@ -45,20 +45,20 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
      * A cryptographic DRBG has the additional property that the output is unpredictable, given that the seed is not known.
      * A DRBG is sometimes also called a Pseudo-random Number Generator (PRNG) or a deterministic random number generator.
      */
-    static final String SECURE_RANDOM_GENERATOR_TYPE = "DRBG";
+    protected static final String SECURE_RANDOM_GENERATOR_TYPE = "DRBG";
 
     /**
      * Number of seeds to generate before resetting the secure random.
      * -> Once the number of usage has been reach everything will be reset.
      * Be careful: the reset operation is expensive: it should not occur too often.
      */
-    static final int NUMBER_OF_ITERATIONS_BEFORE_RESEED = 2048;
+    protected static final int NUMBER_OF_ITERATIONS_BEFORE_RESEED = 2048;
 
     /**
      * Based on current recommendations (bouncy castle, Oracle and various researchers)
      * minimum salt size should be 32 bytes.
      */
-    static final int MINIMUM_SALT_SIZE = 32;
+    protected static final int MINIMUM_SALT_SIZE = 32;
 
     /**
      * Current {@link java.security.SecureRandom}
@@ -74,7 +74,7 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
     /**
      * To encode binary salt (byte[]) in base64 String format.
      */
-    final Base64.Encoder encoder = Base64.getUrlEncoder();
+    protected final Base64.Encoder encoder = Base64.getUrlEncoder();
 
     /**
      * To decode a base64 String salt representation into binary (byte[])
