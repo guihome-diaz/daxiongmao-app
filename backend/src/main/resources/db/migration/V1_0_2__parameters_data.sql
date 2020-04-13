@@ -17,8 +17,8 @@ INSERT INTO PARAMETERS(PARAM_ID, PARAM_NAME, PARAM_VALUE, PARAM_TYPE, DESCRIPTIO
 -- ***********************
 -- Security settings
 -- ***********************
--- Salt (secure random) algorithm
-INSERT INTO PARAMETERS(PARAM_ID, PARAM_NAME, PARAM_VALUE, PARAM_TYPE, DESCRIPTION, VERSION, IS_SENSITIVE) VALUES (SEQ_PARAMETERS.nextval, 'SECURITY.SALT.ALGORITHM', 'DRBG', 'java.lang.String', 'Current SALT (secure random) algorithm. This must be an highly secure algorithm', 1, 0);
+-- Hash size
+INSERT INTO PARAMETERS(PARAM_ID, PARAM_NAME, PARAM_VALUE, PARAM_TYPE, DESCRIPTION, VERSION, IS_SENSITIVE) VALUES (SEQ_PARAMETERS.nextval, 'SECURITY.HASH_SIZE', '256', 'java.lang.Integer', 'Current hash size to use with default hash algorithm', 1, 0);
 
 
 

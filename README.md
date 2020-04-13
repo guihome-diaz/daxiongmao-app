@@ -57,6 +57,21 @@ Each use-case includes security, monitoring and tests by design.
   * This application requires an Oracle database to start
   * Database setup is done using **Flyway**. DB scripts are in [backend/src/main/resources/db]
 
+## Translations
+Backend translations are saved in database, table "LABELS". 
+
+### import translations
+
+*Excel file*
+You can quickly import translations from an Excel file. The Excel file must be composed as follow:
+* it must contain 1 sheet called 'LABELS', or be a single sheet file
+* 1st first column must be the LABEL_CODE
+* Other columns are the translations. Header of each column is the language code (on 2 letters), ex: `FR`, `EN`, `ZH`
+
+*Launch import*
+To trigger the excel file import launch the following maven goal:
+`to be done`
+
 ## Development tips and tricks
 
 ### Debug maven tests

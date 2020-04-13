@@ -49,7 +49,7 @@ public class CtrDrbgSaltGenerator implements ISaltGenerator {
 
     /**
      * Number of seeds to generate before resetting the secure random.
-     * -> Once the number of usage has been reach everything will be reset.
+     * Once the number of usage has been reach everything will be reset.
      * Be careful: the reset operation is expensive: it should not occur too often.
      */
     protected static final int NUMBER_OF_ITERATIONS_BEFORE_RESEED = 2048;

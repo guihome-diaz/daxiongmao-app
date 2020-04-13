@@ -91,7 +91,12 @@ public class Argon2PasswordHash implements IPasswordHash {
     }
 
     @Override
-    public String getHashAlgorithm() {
+    public HashAlgorithm getHashAlgorithm() {
+        return HashAlgorithm.ARGON_2I;
+    }
+
+    @Override
+    public String getHashAlgorithmFullDescription() {
         return String.format("Password hash: {Algorithm: Argon2i | Provider: BouncyCastle | Version: %s | Iterations: %s | Memory/thread: %s kb | Threads: %s | with salt: yes}, base64 encoding, config 2020-03", ARGON2_VERSION, ITERATIONS, ALLOWED_MEMORY_IN_KB, NUMBER_OF_THREADS);
     }
 }

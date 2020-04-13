@@ -122,19 +122,25 @@ public class User extends GenericEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emailConfirmationDate;
 
-    /** User password. This can be let NULL if user wants to validate his email first. Important: like all modern apps, we do NOT store the user password */
-    @Column(name = "PASSWORD_HASH", length = 255)
+    /** Hash size. This is important to recompute the password */
+    @Column(name = "HASH_SIZE", nullable = false)
+    private Integer passwordHashSize;
+
+    /** User password */
+    @NotBlank
+    @Max(500)
+    @Column(name = "PASSWORD_HASH", nullable = false, length = 500)
     private String passwordHash;
 
     /** Security salt. MANDATORY. (random value) that is required to compute the user password hash. Every user have different salts' */
     @NotBlank
-    @Max(255)
-    @Column(name = "PASSWORD_SALT", nullable = false, length = 255)
+    @Max(500)
+    @Column(name = "PASSWORD_SALT", nullable = false, length = 500)
     private String passwordSalt;
 
     /** Password hash algorithm. MANDATORY. This is required to compute the password hash. Security can change over time, that is why we must store the algorithm used for each user */
     @NotBlank
-    @Max(50)
+    @Max(100)
     @Column(name = "PASSWORD_ALGORITHM", nullable = false, length = 50)
     private String passwordAlgorithm;
 

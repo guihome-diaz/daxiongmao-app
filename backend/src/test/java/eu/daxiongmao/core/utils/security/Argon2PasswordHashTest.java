@@ -88,7 +88,13 @@ public class Argon2PasswordHashTest {
 
     @Test
     public void getAlgorithm() {
-        final String expectation = "Password hash: {Algorithm: Argon2i | Provider: BouncyCastle | Version: 19 | Iterations: 3 | Memory/thread: 128 kb | Threads: 4 | with salt: yes}, base64 encoding, config 2020-03";
+        final HashAlgorithm expectation = HashAlgorithm.ARGON_2I;
         Assertions.assertEquals(expectation, argon2PasswordHash.getHashAlgorithm());
+    }
+
+    @Test
+    public void getAlgorithmFullDescription() {
+        final String expectation = "Password hash: {Algorithm: Argon2i | Provider: BouncyCastle | Version: 19 | Iterations: 3 | Memory/thread: 128 kb | Threads: 4 | with salt: yes}, base64 encoding, config 2020-03";
+        Assertions.assertEquals(expectation, argon2PasswordHash.getHashAlgorithmFullDescription());
     }
 }

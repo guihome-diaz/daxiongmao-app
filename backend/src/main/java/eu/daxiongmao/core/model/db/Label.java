@@ -1,5 +1,6 @@
 package eu.daxiongmao.core.model.db;
 
+import eu.daxiongmao.core.model.enums.AppLang;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,6 +91,27 @@ public class Label extends GenericEntity {
 
     public Label() {
         super();
+    }
+
+    /**
+     * To set the given translation for a particular language
+     * @param lang language to set
+     * @param text translation
+     */
+    public void setLang(AppLang lang, String text) {
+        if (lang == null) {
+            // No language: cannot perform operation
+            return;
+        }
+
+        switch (lang) {
+            case FRENCH: setFrench(text); break;
+            case ENGLISH: setEnglish(text); break;
+            case CHINESE: setChinese(text); break;
+            default:
+                // do nothing
+                break;
+        }
     }
 
 }

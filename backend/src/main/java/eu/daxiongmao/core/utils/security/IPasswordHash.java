@@ -25,11 +25,16 @@ public interface IPasswordHash {
      */
     String hashPassword(String password, int hashSize, byte[] salt);
 
-
     /**
      * To get current hash algorithm
+     * @return current hash algorithm
+     */
+    HashAlgorithm getHashAlgorithm();
+
+    /**
+     * To get current hash algorithm (full description) as a String
      * @return current hash algorithm description
      */
-    String getHashAlgorithm();
+    String getHashAlgorithmFullDescription();
 
 }
