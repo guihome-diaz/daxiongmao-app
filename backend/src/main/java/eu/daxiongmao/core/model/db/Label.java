@@ -1,10 +1,7 @@
 package eu.daxiongmao.core.model.db;
 
 import eu.daxiongmao.core.model.enums.AppLang;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Column;

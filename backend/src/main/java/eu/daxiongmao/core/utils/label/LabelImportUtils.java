@@ -6,7 +6,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -24,19 +23,23 @@ public class LabelImportUtils {
 
     private static final String LABEL_SHEET_NAME = "LABELS";
 
+    protected LabelImportUtils() {
+        // package factory
+    }
+
     /**
      * To extract labels from Excel file
      * @param excelFile path of the excel file to process
      * @return corresponding labels or EMPTY
      */
-    public Optional<List<Label>> extractLabels(final Path excelFile) {
+    public Optional<Set<Label>> extractLabels(final Path excelFile) {
         // arg check
         if (excelFile == null) {
             log.warn("Cannot import labels, no file given.");
             return Optional.empty();
         }
         if (Files.notExists(excelFile)) {
-            log.warn("Cannot import labels, requested file {} does not exist.");
+            log.warn("Cannot import labels, requested file {} does not exist.", excelFile.toAbsolutePath());
             return Optional.empty();
         }
 
@@ -45,11 +48,11 @@ public class LabelImportUtils {
             // Get sheet
             final Sheet labelsSheet = getLabelsSheet(wb);
             // Get labels
-            final List<Label> labels = parseLabelsSheet(labelsSheet);
-            log.info("Successfully parsed file '{}', {} labels extracted", excelFile, labels.size());
+            final Set<Label> labels = parseLabelsSheet(labelsSheet);
+            log.info("Successfully labels file: {} labels extracted from {}", labels.size(), excelFile.toAbsolutePath());
             return Optional.of(labels);
         } catch (Exception e) {
-            log.warn("Failed to process label file '{}'", excelFile, e);
+            log.warn("Failed to process label file '{}'", excelFile.toAbsolutePath(), e);
             return Optional.empty();
         }
     }
@@ -77,8 +80,8 @@ public class LabelImportUtils {
      * @param labelsSheet excel sheet to parse
      * @return corresponding labels
      */
-    private List<Label> parseLabelsSheet(final Sheet labelsSheet) {
-        final List<Label> labels = new ArrayList<>();
+    private Set<Label> parseLabelsSheet(final Sheet labelsSheet) {
+        final Set<Label> labels = new HashSet<>();
         Map<Integer, AppLang> columnsLang = new ConcurrentHashMap<>();
         for (final Row row : labelsSheet) {
             if (row.getRowNum() == 0) {
