@@ -19,20 +19,20 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 @Log4j2
-public class LabelImportUtils {
+public class LabelExcelReader {
 
     private static final String LABEL_SHEET_NAME = "LABELS";
 
-    protected LabelImportUtils() {
+    protected LabelExcelReader() {
         // package factory
     }
 
     /**
-     * To extract labels from Excel file
+     * To import labels from Excel file
      * @param excelFile path of the excel file to process
      * @return corresponding labels or EMPTY
      */
-    public Optional<Set<Label>> extractLabels(final Path excelFile) {
+    public Optional<Set<Label>> importLabelsFromFile(final Path excelFile) {
         // arg check
         if (excelFile == null) {
             log.warn("Cannot import labels, no file given.");
@@ -49,7 +49,7 @@ public class LabelImportUtils {
             final Sheet labelsSheet = getLabelsSheet(wb);
             // Get labels
             final Set<Label> labels = parseLabelsSheet(labelsSheet);
-            log.info("Successfully labels file: {} labels extracted from {}", labels.size(), excelFile.toAbsolutePath());
+            log.info("Successfully extracted {} labels from file {}", labels.size(), excelFile.toAbsolutePath());
             return Optional.of(labels);
         } catch (Exception e) {
             log.warn("Failed to process label file '{}'", excelFile.toAbsolutePath(), e);

@@ -19,9 +19,9 @@ import java.util.Set;
  * @since 2020/04
  */
 @Log4j2
-public class LabelImportUtilsTest {
+public class LabelExcelReaderTest {
 
-    private final LabelImportUtils excelUtils = new LabelImportUtils();
+    private final LabelExcelReader excelUtils = new LabelExcelReader();
 
     @Test
     public void parseExcelFileManyTabs() {
@@ -62,7 +62,7 @@ public class LabelImportUtilsTest {
     @Test
     public void parseMalformedFile() {
         final Path excelFile = Paths.get("src","test","resources", "labels", "malformed_file.xlsx");
-        final Optional<Set<Label>> labels = excelUtils.extractLabels(excelFile);
+        final Optional<Set<Label>> labels = excelUtils.importLabelsFromFile(excelFile);
         Assertions.assertNotNull(labels);
         Assertions.assertTrue(labels.isPresent());
         Assertions.assertEquals(0, labels.get().size());
@@ -70,12 +70,12 @@ public class LabelImportUtilsTest {
 
     @Test
     public void parseUnknownFiles() {
-        Optional<Set<Label>> labels = excelUtils.extractLabels(null);
+        Optional<Set<Label>> labels = excelUtils.importLabelsFromFile(null);
         Assertions.assertNotNull(labels);
         Assertions.assertTrue(labels.isEmpty());
 
         final Path excelFile = Paths.get("src","moon","resources", "good_labels.xlsx");
-        labels = excelUtils.extractLabels(excelFile);
+        labels = excelUtils.importLabelsFromFile(excelFile);
         Assertions.assertNotNull(labels);
         Assertions.assertTrue(labels.isEmpty());
     }
@@ -85,7 +85,7 @@ public class LabelImportUtilsTest {
      * @param excelFile excel file to check
      */
     private void parseAndCheckExcelTestFile(final Path excelFile) {
-        final Optional<Set<Label>> labels = excelUtils.extractLabels(excelFile);
+        final Optional<Set<Label>> labels = excelUtils.importLabelsFromFile(excelFile);
         Assertions.assertNotNull(labels);
         Assertions.assertTrue(labels.isPresent());
         Assertions.assertEquals(26, labels.get().size());

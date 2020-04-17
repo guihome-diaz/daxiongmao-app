@@ -4,14 +4,7 @@ import eu.daxiongmao.core.model.enums.AppLang;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 
@@ -56,34 +49,22 @@ public class Label extends GenericEntity {
     @Max(2000)
     @Column(name = "LANG_ZH", length = 2000)
     private String chinese;
-    public void setChinese(String zhText) {
-        if (StringUtils.isNotBlank(zhText)) {
-            this.chinese = zhText.trim();
-        } else {
-            this.chinese = null;
-        }
+    public void setChinese(String text) {
+        setLang(AppLang.CHINESE, text);
     }
 
     @Max(2000)
     @Column(name = "LANG_EN", length = 2000)
     private String english;
-    public void setEnglish(String enText) {
-        if (StringUtils.isNotBlank(enText)) {
-            this.english = enText.trim();
-        } else {
-            this.english = null;
-        }
+    public void setEnglish(String text) {
+        setLang(AppLang.ENGLISH, text);
     }
 
     @Max(2000)
     @Column(name = "LANG_FR", length = 2000)
     private String french;
-    public void setFrench(String frText) {
-        if (StringUtils.isNotBlank(frText)) {
-            this.french = frText.trim();
-        } else {
-            this.french = null;
-        }
+    public void setFrench(String text) {
+       setLang(AppLang.FRENCH, text);
     }
 
     public Label() {
@@ -100,15 +81,39 @@ public class Label extends GenericEntity {
             // No language: cannot perform operation
             return;
         }
+        final String textToSet = StringUtils.isNotBlank(text) ? text.trim() : null;
 
         switch (lang) {
-            case FRENCH: setFrench(text); break;
-            case ENGLISH: setEnglish(text); break;
-            case CHINESE: setChinese(text); break;
+            case FRENCH: this.french = textToSet; break;
+            case ENGLISH: this.english = textToSet; break;
+            case CHINESE: this.chinese = textToSet; break;
             default:
                 // do nothing
                 break;
         }
     }
 
+    /**
+     * To get the given translation for a particular language
+     * @param lang language to retrieve
+     * @return corresponding translation or null
+     */
+    public String getLang(AppLang lang) {
+        if (lang == null) {
+            // No language: cannot perform operation
+            return null;
+        }
+
+        String textToReturn = null;
+        switch (lang) {
+            case FRENCH: textToReturn = this.french ; break;
+            case ENGLISH: textToReturn = this.english; break;
+            case CHINESE: textToReturn = this.chinese; break;
+            default:
+                // do nothing
+                break;
+        }
+
+        return textToReturn;
+    }
 }
