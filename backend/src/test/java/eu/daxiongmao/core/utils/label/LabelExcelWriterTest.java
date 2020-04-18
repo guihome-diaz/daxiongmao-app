@@ -41,7 +41,7 @@ public class LabelExcelWriterTest {
         Assertions.assertFalse(labelsFromFile.get().isEmpty());
         Assertions.assertEquals(labels.size(), labelsFromFile.get().size());
         for (Label lbl : labels) {
-            log.debug("looking for label code: {} | {}", lbl.getCode(), lbl);
+            log.trace("looking for label code: {} | {}", lbl.getCode(), lbl);
             Assertions.assertTrue(labelsFromFile.get().contains(lbl));
         }
     }
@@ -91,7 +91,7 @@ public class LabelExcelWriterTest {
             if (dataContent.length > 3) {
                 label.setLang(AppLang.CHINESE, dataContent[3]);
             }
-            log.debug("fake dataset # new label: {}", label);
+            log.trace("fake dataset # new label: {}", label);
             labels.add(label);
         }
         return labels;
