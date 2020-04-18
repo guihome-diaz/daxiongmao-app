@@ -16,8 +16,8 @@ import javax.validation.constraints.NotBlank;
  */
 @Getter
 @Setter
-@ToString(callSuper = true, of = { "code", "english" })
-@EqualsAndHashCode(callSuper = true, of = {"code"})
+@ToString(callSuper = true, of = { "code", "english","french","chinese" })
+@EqualsAndHashCode(of = {"code"})
 @Entity
 @Table(name = "LABELS", indexes = {
         @Index(name = "LABELS_CODE_IDX", unique = true, columnList = "CODE"),
