@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="30">
+    <Properties>
+        <Property name="logPattern">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} [%-5level] [%t] %logger{36} - %msg%n</Property>
+        <Property name="appLogsRoot">${sys:java.io.tmpdir}</Property>
+        <Property name="log-path">${appLogsRoot}/logs</Property>
+        <Property name="log-path-archive">${log-path}/archive</Property>
+    </Properties>
+
+
+    <!-- ################################ -->
+    <!-- # Appenders: logs destinations # -->
+    <!-- ################################ -->
+    <!-- Each log file will save logs events based on LOGGER level + appender's threshold filter -->
+    <Appenders>
+        <!-- Console (default) appender -->
+        <Console name="console" target="SYSTEM_OUT">
+            <ThresholdFilter level="DEBUG" />
+            <PatternLayout pattern="${logPattern}" />
+        </Console>
+
+
+        <!-- ======================= -->
+        <!--        ERROR FILE       -->
+        <!-- ======================= -->
+        <!-- An ERROR is something that is NOT handled/foreseen: when no action has been coded to balance the error effect. -->
+        <!-- Use errors for cases such as: try { .. } catch(Exception e) { log.error("Should never occur", e); } -->
+        <RollingFile name="errorFile" fileName="${log-path}/app-errors.log"
+                                  filePattern="${log-path-archive}/app-errors_%d{yyyy-MM-dd}_%i.log">
+            <ThresholdFilter level="ERROR" />
+            <PatternLayout pattern="${logPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20MB" />
+            </Policies>
+        </RollingFile>
+
+
+        <!-- ======================= -->
+        <!--        WARN FILE        -->
+        <!-- ======================= -->
+        <!-- A WARNING is an error that has been handled but should be checked. -->
+        <!-- This is a BUSINESS error and/or TECHNICAL failure that should not occur. -->
+        <!-- Warning example: a 3rd party went down during process execution. -->
+        <!--                  Some workflow steps have been skipped and results should be checked -->
+        <!--                  This did NOT stop the execution of the main task. -->
+        <RollingFile name="warnFile" fileName="${log-path}/app-warnings.log"
+                                     filePattern="${log-path-archive}/app-warnings_%d{yyyy-MM-dd}_%i.log">
+            <ThresholdFilter level="WARN" />
+            <PatternLayout pattern="${logPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20MB" />
+            </Policies>
+        </RollingFile>
+
+        <!-- ======================= -->
+        <!--        INFO FILE        -->
+        <!-- ======================= -->
+        <!-- This is a business INFO or key technical event -->
+        <RollingFile name="infoFile" fileName="${log-path}/app-info.log"
+                     filePattern="${log-path-archive}/app-info_%d{yyyy-MM-dd}_%i.log">
+            <ThresholdFilter level="INFO" />
+            <PatternLayout pattern="${logPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20MB" />
+            </Policies>
+        </RollingFile>
+
+        <!-- ======================= -->
+        <!--        DEBUG FILE        -->
+        <!-- ======================= -->
+        <!-- All debug events. This is not for production -->
+        <RollingFile name="debugFile" fileName="${log-path}/app-debug.log"
+                     filePattern="${log-path-archive}/app-debug_%d{yyyy-MM-dd}_%i.log">
+            <ThresholdFilter level="DEBUG" />
+            <PatternLayout pattern="${logPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20MB" />
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <!-- ########### -->
+    <!-- # Loggers # -->
+    <!-- ########### -->
+    <!-- you can put here configurations to specify log level for dedicated packages. -->
+    <Loggers>
+        <!-- ==================================== -->
+        <!-- 3rd parties libraries and frameworks -->
+        <!-- ==================================== -->
+        <Logger name="org.hibernate" level="WARN" />
+        <Logger name="org.springframework" level="WARN" />
+        <Logger name="com.zaxxer" level="INFO"/>
+        <Logger name="org.flywaydb" level="INFO"/>
+        <Logger name="org.springframework.boot" level="INFO"/>
+        <Logger name="org.springframework.test" level="INFO"/>
+
+        <!-- ==================================== -->
+        <!-- Application's logs -->
+        <!-- ==================================== -->
+        <Logger name="eu.daxiongmao.core" level="DEBUG"/>
+
+        <!-- ==================================== -->
+        <!-- root level to add the logs to enable -->
+        <!-- ==================================== -->
+        <!-- The root level must be the lowest as possible to enable logging in the lowest appender level -->
+        <!-- then you can filter by appender to only show a specific level -->
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="errorFile" />
+            <AppenderRef ref="warnFile" />
+            <AppenderRef ref="infoFile" />
+            <AppenderRef ref="debugFile" />
+        </Root>
+    </Loggers>
+</Configuration>

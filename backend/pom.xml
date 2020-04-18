@@ -23,6 +23,22 @@
 
 	<dependencies>
 		<!-- # SPRING BOOT framework # -->
+		<!-- Spring boot base (starter) # manual import to exclude logback because I'm using log4j2 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Log4j2 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
 		<!-- Information about application's status -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
