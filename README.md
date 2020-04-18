@@ -58,19 +58,34 @@ Each use-case includes security, monitoring and tests by design.
 * Database setup is done using **Flyway**. DB scripts are in [backend/src/main/resources/db]
 
 ## Translations
-Backend translations are saved in database, table "LABELS". 
+Backend translations are saved in database, table "LABELS". You can import/export translations with Excel files.  
 
-### import translations
+### Import translations
 
 *Excel file*
+
 You can quickly import translations from an Excel file. The Excel file must be composed as follow:
 * it must contain 1 sheet called 'LABELS', or be a single sheet file
 * 1st first column must be the LABEL_CODE
 * Other columns are the translations. Header of each column is the language code (on 2 letters), ex: `FR`, `EN`, `ZH`
 
 *Launch import*
+
 To trigger the excel file import launch the following maven goal:
 `to be done`
+
+### Export translations
+
+*Configuration*
+
+You have to configure the datasource to use for the labels export. 
+`to be done`
+
+*Launch export*
+
+To trigger the Excel file export launch the following maven goal:
+`to be done` 
+
 
 ## Development tips and tricks
 
