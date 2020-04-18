@@ -7,25 +7,25 @@ This page contains key steps to set up the Oracle database locally.
 ### Oracle XE
 
 This is a full-featured Oracle database server that can be used for development purposes. See [Oracle Database XE](https://www.oracle.com/database/technologies/appdev/xe.html)
-  * Download the version *18c*
-  * Install it on your server / workstation 
+* Download the version *18c*
+* Install it on your server / workstation 
 
 ### Oracle SQL developer
 
 Oracle SQL developer is an excellent SQL client to use with Oracle DB.
-  * Download the latest version from [Oracle SQL developer](https://www.oracle.com/fr/database/technologies/appdev/sql-developer.html) 
-  * Install it on your workstation
+* Download the latest version from [Oracle SQL developer](https://www.oracle.com/fr/database/technologies/appdev/sql-developer.html) 
+* Install it on your workstation
 
 ## Connection to Oracle XE as SYS-ADMIN
 
 ### With SQL developer
 * Open SQL developer
 * If the server is running on the same machine as SQL developer, then the "**XE**" connection is proposed 
-  * User: ```SYSTEM```
-  * Password: *secret chose during server setup*
-  * Host: ```localhost```
-  * Port: ```1521```
-  * Service name: ```XE```
+* User: ```SYSTEM```
+* Password: *secret chose during server setup*
+* Host: ```localhost```
+* Port: ```1521```
+* Service name: ```XE```
 
 **Confirm that the connection is OK** by running the following command: 
 ```sql
@@ -52,9 +52,9 @@ Expectations:
 |     3    | XEPDB1   |
 
 In this case :
-  * `CDB$ROOT` is the Container Database
-  * `PDB$SEED` is a read-only template for creating PDBS
-  * `XEPDB1` is a PDB
+* `CDB$ROOT` is the Container Database
+* `PDB$SEED` is a read-only template for creating PDBS
+* `XEPDB1` is a PDB
 
 ## Create user and schema
 
@@ -63,8 +63,8 @@ Link to a [good article from ORACLE blog](https://blogs.oracle.com/sql/how-to-cr
 ### Create OWNER user
 
 In Oracle a schema must be linked to an user. A common practice is to use an "owner" account. 
-  * **Owner is responsible of the STRUCTURE**, he can create tables, views, procedures, sequences and triggers.
-  * **Owner must grant** CRUD (Create, Read, Update, Delete) **rights to working user for *each* table** 
+* **Owner is responsible of the STRUCTURE**, he can create tables, views, procedures, sequences and triggers.
+* **Owner must grant** CRUD (Create, Read, Update, Delete) **rights to working user for *each* table** 
 
 Execute the following commands as SYSADMIN: 
 
