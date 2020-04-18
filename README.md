@@ -62,26 +62,26 @@ Backend translations are saved in database, table "LABELS". You can import/expor
 
 ### Import translations
 
-*Excel file*
+#### Excel file
 
 You can quickly import translations from an Excel file. The Excel file must be composed as follow:
 * it must contain 1 sheet called 'LABELS', or be a single sheet file
 * 1st first column must be the LABEL_CODE
 * Other columns are the translations. Header of each column is the language code (on 2 letters), ex: `FR`, `EN`, `ZH`
 
-*Launch import*
+#### Launch import
 
 To trigger the excel file import launch the following maven goal:
 `to be done`
 
 ### Export translations
 
-*Configuration*
+#### Configuration
 
 You have to configure the datasource to use for the labels export. 
 `to be done`
 
-*Launch export*
+#### Launch export
 
 To trigger the Excel file export launch the following maven goal:
 `to be done` 
