@@ -46,6 +46,17 @@ public class LabelExcelWriterTest {
         }
     }
 
+    @Test
+    public void writeContentErrors() {
+        // write test content
+        Optional<Path> tempFile = excelWriter.exportLabelsToFile(null);
+        Assertions.assertTrue(tempFile.isEmpty());
+
+
+        tempFile = excelWriter.exportLabelsToFile(new ArrayList<>());
+        Assertions.assertTrue(tempFile.isEmpty());
+    }
+
     private List<Label> getTestData() {
         // dataset
         List<String> input = new ArrayList<>();
